@@ -3309,27 +3309,35 @@
 			] };
 		},
 		_aliasRender_template_full: function( cluster, indices ) {
-			return cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map( function(alias, row) {
-				return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(alias.indices.map(function(index, i) {
-					if (index) {
+			return cluster.aliases.length && { tag: "TBODY", children: {
+				tag: "TR",
+				children: [ { tag: "TD" },{ tag: "TD" } ].concat(indices.map(function (index, i) {
+					const aliases = cluster.aliases.filter(function (a) { return a.indices[i]; });
+					if (aliases.length) {
 						return {
 							tag: "TD",
-							css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
-							cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
-							text: alias.name,
-							children: this.interactive ? [
-								{	tag: 'SPAN',
-									text: i18n.text("General.CloseGlyph"),
-									cls: 'uiNodesView-hasAlias-remove',
-									onclick: this._deleteAliasAction_handler.bind( this, index, alias )
+							children: aliases.map(function (alias) {
+								return {
+									tag: "DIV",
+									css: { background: "#" + "9ce9c7fc9".substr((i+6)%7,3) },
+									cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
+									text: alias.name,
+									children: this.interactive ? [
+										{	tag: 'SPAN',
+											text: i18n.text("General.CloseGlyph"),
+											cls: 'uiNodesView-hasAlias-remove',
+											onclick: this._deleteAliasAction_handler.bind( this, index, alias )
+										}
+									]: null
 								}
-							]: null
+							}, this)
 						};
-					}	else {
+					} else {
 						return { tag: "TD" };
 					}
-				}, this ) ) };
-			}, this )	};
+				}, this))
+				}
+			}
 		},
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "table uiNodesView", children: [

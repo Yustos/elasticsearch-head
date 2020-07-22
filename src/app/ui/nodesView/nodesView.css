@@ -28,6 +28,8 @@
 
 .uiNodesView-hasAlias {
 	text-align: center;
+	padding: 2px;
+	margin: 2px;
 }
 .uiNodesView-hasAlias.max {
 	border-top-right-radius: 8px;
